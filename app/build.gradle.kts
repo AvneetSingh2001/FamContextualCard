@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.hiltAndroid)
 }
 
 android {
@@ -70,4 +71,6 @@ dependencies {
     // Retrofit
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.compiler)
 }
