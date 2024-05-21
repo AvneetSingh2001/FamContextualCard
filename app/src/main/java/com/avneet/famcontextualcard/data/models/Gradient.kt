@@ -1,4 +1,4 @@
-package com.avneet.famcontextualcard.models
+package com.avneet.famcontextualcard.data.models
 
 import com.google.gson.annotations.SerializedName
 

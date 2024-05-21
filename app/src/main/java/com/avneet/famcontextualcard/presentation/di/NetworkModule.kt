@@ -1,7 +1,7 @@
 package com.avneet.famcontextualcard.presentation.di
 
 import com.avneet.famcontextualcard.BuildConfig
-import com.avneet.famcontextualcard.networking.FamApiService
+import com.avneet.famcontextualcard.data.networking.FamApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

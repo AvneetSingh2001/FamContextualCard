@@ -1,6 +1,6 @@
-package com.avneet.famcontextualcard.models
+package com.avneet.famcontextualcard.data.models
 
-import com.avneet.famcontextualcard.models.Entity
+import com.avneet.famcontextualcard.data.models.Entity
 import com.google.gson.annotations.SerializedName
 
 data class FormattedText (
