@@ -1,7 +1,12 @@
 package com.avneet.famcontextualcard.utils
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+
 sealed class NetworkResult<out T> {
-    class Loading(val message: String?) : NetworkResult<Nothing>()
+    data object Loading : NetworkResult<Nothing>()
     class Success<out T>(val data: T?) : NetworkResult<T>()
-    class Error(val exception: Throwable?) : NetworkResult<Nothing>()
+    class Error(var error: String?) : NetworkResult<Nothing>()
 }

@@ -85,4 +85,8 @@ dependencies {
     //compose
     implementation(libs.androidx.hilt.navigation.compose)
 
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.bom)
+    implementation(libs.kotlinx.coroutines.core)
 }
