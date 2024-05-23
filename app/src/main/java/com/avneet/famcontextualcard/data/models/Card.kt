@@ -28,7 +28,7 @@ data class Card(
     val formattedDescription: FormattedText? = null,
 
     @SerializedName("bg_color")
-    val bgColor: String? = null,
+    val bgColor: String,
 
     @SerializedName("bg_gradient")
     val bgGradient: Gradient? = null

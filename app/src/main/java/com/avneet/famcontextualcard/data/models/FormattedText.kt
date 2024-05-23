@@ -7,5 +7,5 @@ data class FormattedText (
     val text: String? = null,
 
     @SerializedName("entities")
-    val entityList: List<Entity>? = null
+    val entityList: List<Entity>
 )

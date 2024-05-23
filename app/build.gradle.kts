@@ -89,4 +89,12 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.bom)
     implementation(libs.kotlinx.coroutines.core)
+
+    //compose runtime
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
+    //coil compose
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
 }
