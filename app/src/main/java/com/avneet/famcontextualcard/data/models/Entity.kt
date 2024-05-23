@@ -6,7 +6,7 @@ data class Entity(
     val text: String,
 
     @SerializedName("font_style")
-    val fontStyle: String? = null,
+    val fontStyle: FontStyle? = null,
 
     val color: String? = null,
 
