@@ -2,6 +2,7 @@ package com.avneet.famcontextualcard.presentation.ui.screens.card_components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -33,12 +36,14 @@ fun DynamicWidthCardGroup(
     cardGroup: CardGroup,
     processDeepUrl: (String) -> Unit
 ) {
-    Row(
+    LazyRow(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(cardGroup.height?.dp ?: 0.dp)
+            .height(cardGroup.height?.dp ?: 0.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        cardGroup.cardList.forEach { card ->
+        items(
+            items = cardGroup.cardList
+        ) { card ->
             DynamicWidthCard(
                 modifier = Modifier.fillMaxHeight(),
                 card = card,
@@ -62,9 +67,7 @@ fun DynamicWidthCard(
     Card(
         modifier = modifier
             .aspectRatio(card.bgImage?.aspectRatio ?: 0.5f, matchHeightConstraintsFirst = true)
-            .clickable {
-                card.url?.let { processDeepUrl(it) }
-            },
+            .clickable { card.url?.let { processDeepUrl(it) } },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (card.bgColor != null) Color(card.bgColor.toColorInt())
