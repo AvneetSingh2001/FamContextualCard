@@ -33,16 +33,15 @@ fun CardScreen(
     viewModel: CardScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.cardScreenUiState.collectAsStateWithLifecycle()
+    val isRefreshing = viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     CardScreen(
         modifier = modifier,
         uiState = uiState.value,
-        dismiss = { cardId ->
-            viewModel.hideCardPermanently(cardId = cardId)
-        },
-        remind = { cardId ->
-            viewModel.hideCardTemporarily(cardId = cardId)
-        }
+        dismiss = { viewModel.hideCardPermanently(cardId = it) },
+        remind = { viewModel.hideCardTemporarily(cardId = it) },
+        onRefresh = { viewModel.refresh() },
+        isRefreshing = isRefreshing.value
     )
 }
 
@@ -51,7 +50,9 @@ fun CardScreen(
     modifier: Modifier = Modifier,
     uiState: CardScreenUiState,
     dismiss: (Int) -> Unit,
-    remind: (Int) -> Unit
+    remind: (Int) -> Unit,
+    onRefresh: () -> Unit,
+    isRefreshing: Boolean
 ) {
     Box(
         modifier = modifier
@@ -78,7 +79,9 @@ fun CardScreen(
                             modifier = Modifier.fillMaxSize(),
                             cardList = cardGroup.cardGroup,
                             dismiss = dismiss,
-                            remind = remind
+                            remind = remind,
+                            onRefresh = onRefresh,
+                            isRefreshing = isRefreshing
                         )
                     }
                 }
@@ -114,7 +117,9 @@ fun CardScreenPreview() {
         CardScreen(
             uiState = CardScreenUiState.Success(CardGroupResponse(cardGroup = listOf())),
             dismiss = {},
-            remind = {}
+            remind = {},
+            onRefresh = { },
+            isRefreshing = false
         )
     }
 }
@@ -126,7 +131,9 @@ fun CardScreenLoadingPreview() {
         CardScreen(
             uiState = CardScreenUiState.Loading,
             dismiss = {},
-            remind = {}
+            remind = {},
+            onRefresh = { },
+            isRefreshing = false
         )
     }
 }

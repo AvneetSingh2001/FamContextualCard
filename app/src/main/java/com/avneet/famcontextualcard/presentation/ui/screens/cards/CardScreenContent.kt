@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.avneet.famcontextualcard.data.models.CardGroup
+import com.avneet.famcontextualcard.presentation.ui.components.PullToRefreshLazyColumn
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.BigDisplayCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.DynamicWidthCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.ImageCardGroup
@@ -33,12 +34,17 @@ fun CardScreenContent(
     modifier: Modifier = Modifier,
     cardList: List<CardGroup>,
     dismiss: (Int) -> Unit,
-    remind: (Int) -> Unit
+    remind: (Int) -> Unit,
+    onRefresh: () -> Unit,
+    isRefreshing: Boolean
 ) {
     val context = LocalContext.current
     Column(modifier = modifier) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(items = cardList) { cardGroup ->
+        PullToRefreshLazyColumn(
+            isRefreshing = isRefreshing,
+            onRefresh = { onRefresh() },
+            items = cardList,
+            content = { cardGroup ->
                 Spacer(modifier = Modifier.height(20.dp))
                 when (cardGroup.designType) {
                     CardGroup.DesignType.SMALL_DISPLAY_CARD -> {
@@ -89,7 +95,7 @@ fun CardScreenContent(
                     }
                 }
             }
-        }
+        )
     }
 }
 

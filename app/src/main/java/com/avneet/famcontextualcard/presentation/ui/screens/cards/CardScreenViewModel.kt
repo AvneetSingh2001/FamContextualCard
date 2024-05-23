@@ -22,9 +22,17 @@ class CardScreenViewModel @Inject constructor(
     private var _cardUiState: MutableStateFlow<CardScreenUiState> = MutableStateFlow(CardScreenUiState.Loading)
     val cardScreenUiState: StateFlow<CardScreenUiState> get() = _cardUiState
 
+    private var _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing
+
     private val temporarilyHiddenCardIds = mutableSetOf<Int>()
 
     init {
+        fetchCards()
+    }
+
+    fun refresh() {
+        _isRefreshing.value = true
         fetchCards()
     }
 
@@ -40,9 +48,10 @@ class CardScreenViewModel @Inject constructor(
                                 temporarilyHiddenCardIds.contains(card.id)
                             })
                         }
+                        _isRefreshing.value = false
                         CardScreenUiState.Success(CardGroupResponse(filteredCardGroups))
                     }
-                    is NetworkResult.Error -> CardScreenUiState.Error(result.error)
+                    is NetworkResult.Error -> CardScreenUiState.Error(result.error).also { _isRefreshing.value = false }
                 }
             }
         }
