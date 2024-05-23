@@ -1,4 +1,4 @@
-package com.avneet.famcontextualcard.utils
+package com.avneet.famcontextualcard.data.utils
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

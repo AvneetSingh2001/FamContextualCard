@@ -1,4 +1,4 @@
-package com.avneet.famcontextualcard.utils
+package com.avneet.famcontextualcard.data.utils
 
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException

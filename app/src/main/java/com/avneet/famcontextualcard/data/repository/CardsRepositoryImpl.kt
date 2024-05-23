@@ -3,9 +3,9 @@ package com.avneet.famcontextualcard.data.repository
 import com.avneet.famcontextualcard.data.models.CardGroupResponse
 import com.avneet.famcontextualcard.data.networking.FamApiService
 import com.avneet.famcontextualcard.domain.repository.CardsRepository
-import com.avneet.famcontextualcard.utils.NetworkResult
-import com.avneet.famcontextualcard.utils.toNetworkError
-import com.avneet.famcontextualcard.utils.toNetworkResult
+import com.avneet.famcontextualcard.data.utils.NetworkResult
+import com.avneet.famcontextualcard.data.utils.toNetworkError
+import com.avneet.famcontextualcard.data.utils.toNetworkResult
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers

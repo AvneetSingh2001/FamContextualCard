@@ -25,7 +25,7 @@ import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import com.avneet.famcontextualcard.data.models.Card
 import com.avneet.famcontextualcard.data.models.CardGroup
-import com.avneet.famcontextualcard.utils.gradientBackground
+import com.avneet.famcontextualcard.data.utils.gradientBackground
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.avneet.famcontextualcard
+package com.avneet.famcontextualcard.presentation
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

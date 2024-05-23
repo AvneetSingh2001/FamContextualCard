@@ -1,4 +1,4 @@
-package com.avneet.famcontextualcard.utils
+package com.avneet.famcontextualcard.data.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier

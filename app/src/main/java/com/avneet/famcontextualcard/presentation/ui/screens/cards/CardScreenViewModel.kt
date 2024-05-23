@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avneet.famcontextualcard.data.models.CardGroupResponse
 import com.avneet.famcontextualcard.domain.repository.CardsRepository
-import com.avneet.famcontextualcard.utils.NetworkResult
+import com.avneet.famcontextualcard.data.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
