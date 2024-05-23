@@ -1,14 +1,11 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.cards
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -18,19 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
-import coil.compose.AsyncImage
-import com.avneet.famcontextualcard.data.models.Card
 import com.avneet.famcontextualcard.data.models.CardGroup
-import com.avneet.famcontextualcard.data.models.CardImage
-import com.avneet.famcontextualcard.data.models.Entity
-import com.avneet.famcontextualcard.data.models.FormattedText
-import com.avneet.famcontextualcard.presentation.ui.components.FamFormattedText
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardGroup
+import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardWithArrowGroup
 import com.avneet.famcontextualcard.ui.theme.FamContextualCardTheme
 
 
@@ -39,8 +28,9 @@ fun CardScreenContent(
     modifier: Modifier = Modifier,
     cardList: List<CardGroup>
 ) {
+    val context = LocalContext.current
     Column(modifier = modifier) {
-        LazyColumn {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(items = cardList) { cardGroup ->
                 when (cardGroup.designType) {
                     CardGroup.DesignType.SMALL_DISPLAY_CARD -> {
@@ -48,7 +38,6 @@ fun CardScreenContent(
                     }
 
                     CardGroup.DesignType.BIG_DISPLAY_CARD -> {
-
                     }
 
                     CardGroup.DesignType.IMAGE_CARD -> {
@@ -56,7 +45,12 @@ fun CardScreenContent(
                     }
 
                     CardGroup.DesignType.SMALL_CARD_WITH_ARROW -> {
-
+                        SmallDisplayCardWithArrowGroup(
+                            cardGroup = cardGroup,
+                            processDeepLink = { url ->
+                                processDeepLink(context = context, deepLinkUrl = url)
+                            }
+                        )
                     }
 
                     CardGroup.DesignType.DYNAMIC_WIDTH_CARD -> {
@@ -66,5 +60,13 @@ fun CardScreenContent(
             }
         }
     }
+}
+
+fun processDeepLink(context: Context, deepLinkUrl: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(deepLinkUrl)
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+    context.startActivity(intent)
 }
 

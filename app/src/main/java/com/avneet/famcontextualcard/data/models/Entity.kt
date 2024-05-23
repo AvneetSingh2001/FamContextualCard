@@ -8,6 +8,9 @@ data class Entity(
     @SerializedName("font_style")
     val fontStyle: FontStyle? = null,
 
+    @SerializedName("font_size")
+    val fontSize: Float? = null,
+
     val color: String? = null,
 
     val url: String? = null,

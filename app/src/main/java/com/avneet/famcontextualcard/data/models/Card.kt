@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Card(
     val id: Int? = null,
 
-    val name: String? = null,
+    val name: String,
 
     val title: String? = null,
 
@@ -28,7 +28,7 @@ data class Card(
     val formattedDescription: FormattedText? = null,
 
     @SerializedName("bg_color")
-    val bgColor: String,
+    val bgColor: String? = null,
 
     @SerializedName("bg_gradient")
     val bgGradient: Gradient? = null

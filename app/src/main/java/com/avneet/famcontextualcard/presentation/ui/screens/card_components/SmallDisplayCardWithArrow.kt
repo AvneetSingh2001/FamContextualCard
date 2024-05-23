@@ -1,8 +1,7 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.card_components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +34,10 @@ import com.avneet.famcontextualcard.data.models.CardImage
 import com.avneet.famcontextualcard.presentation.ui.components.FamFormattedText
 
 @Composable
-fun SmallDisplayCardGroup(cardGroup: CardGroup) {
+fun SmallDisplayCardWithArrowGroup(
+    cardGroup: CardGroup,
+    processDeepLink: (String) -> Unit
+) {
     val scrollState = rememberScrollState()
     Row(modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max)) {
         if (cardGroup.cardList.size > 1 && cardGroup.isScrollable) {
@@ -42,9 +47,10 @@ fun SmallDisplayCardGroup(cardGroup: CardGroup) {
                     .padding(paddingValues = PaddingValues(horizontal = 16.dp))
             ) {
                 cardGroup.cardList.forEach { card ->
-                    SmallDisplayCard(
+                    SmallDisplayCardWithArrow(
                         modifier = Modifier,
-                        card = card
+                        card = card,
+                        processDeepLink = processDeepLink
                     )
 
                     if (card != cardGroup.cardList.last()) {
@@ -56,11 +62,12 @@ fun SmallDisplayCardGroup(cardGroup: CardGroup) {
             Row(
                 modifier = Modifier
                     .padding(paddingValues = PaddingValues(horizontal = 16.dp))
-            ){
+            ) {
                 cardGroup.cardList.forEach { card ->
-                    SmallDisplayCard(
+                    SmallDisplayCardWithArrow(
                         modifier = Modifier.weight(1f),
-                        card = card
+                        card = card,
+                        processDeepLink = processDeepLink
                     )
 
                     if (card != cardGroup.cardList.last()) {
@@ -74,9 +81,10 @@ fun SmallDisplayCardGroup(cardGroup: CardGroup) {
 
 
 @Composable
-fun SmallDisplayCard(
+fun SmallDisplayCardWithArrow(
     modifier: Modifier = Modifier,
-    card: Card
+    card: Card,
+    processDeepLink: (String) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -88,46 +96,57 @@ fun SmallDisplayCard(
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (card.icon != null) {
-            when (card.icon.imageType) {
-                CardImage.ImageType.EXTERNAL -> {
-                    AsyncImage(
-                        model = card.icon.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+        Row(modifier = Modifier.weight(1f)) {
+            if (card.icon != null) {
+                when (card.icon.imageType) {
+                    CardImage.ImageType.EXTERNAL -> {
+                        AsyncImage(
+                            model = card.icon.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                        )
+                    }
+
+                    CardImage.ImageType.ASSET -> {
+                        AsyncImage(
+                            model = card.icon.assetType,
+                            contentDescription = null,
+                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+
+            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
+                if (card.formattedTitle != null) {
+                    Text(
+                        text = FamFormattedText(
+                            entityList = card.formattedTitle.entityList,
+                            simpleText = card.formattedTitle.text
+                        ),
                     )
                 }
 
-                CardImage.ImageType.ASSET -> {
-                    AsyncImage(
-                        model = card.icon.assetType,
-                        contentDescription = null,
-                        modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                if (card.formattedDescription != null) {
+                    Text(
+                        text = FamFormattedText(
+                            entityList = card.formattedDescription.entityList,
+                            simpleText = card.formattedDescription.text
+                        )
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.width(10.dp))
         }
 
-        Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-            if (card.formattedTitle != null) {
-                Text(
-                    text = FamFormattedText(
-                        entityList = card.formattedTitle.entityList,
-                        simpleText = card.formattedTitle.text
-                    ),
-                )
-            }
 
-            if (card.formattedDescription != null) {
-                Text(
-                    text = FamFormattedText(
-                        entityList = card.formattedDescription.entityList,
-                        simpleText = card.formattedDescription.text
-                    )
-                )
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            modifier = Modifier.clickable {
+                card.url?.let { processDeepLink(it) }
             }
-        }
+        )
     }
 }
