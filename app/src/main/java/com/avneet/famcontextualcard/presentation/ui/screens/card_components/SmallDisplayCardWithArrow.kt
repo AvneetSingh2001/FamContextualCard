@@ -18,6 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,67 +88,73 @@ fun SmallDisplayCardWithArrow(
     card: Card,
     processDeepLink: (String) -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(
-                color = if (card.bgColor != null) Color(card.bgColor.toColorInt())
-                else Color.Transparent
-            )
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (card.bgColor != null) Color(card.bgColor.toColorInt())
+            else Color.Transparent
+        ),
     ) {
-        Row(modifier = Modifier.weight(1f)) {
-            if (card.icon != null) {
-                when (card.icon.imageType) {
-                    CardImage.ImageType.EXTERNAL -> {
-                        AsyncImage(
-                            model = card.icon.imageUrl,
-                            contentDescription = null,
-                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+        Row(
+            modifier = Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(modifier = Modifier.weight(1f)) {
+                if (card.icon != null) {
+                    when (card.icon.imageType) {
+                        CardImage.ImageType.EXTERNAL -> {
+                            AsyncImage(
+                                model = card.icon.imageUrl,
+                                contentDescription = null,
+                                modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                            )
+                        }
+
+                        CardImage.ImageType.ASSET -> {
+                            AsyncImage(
+                                model = card.icon.assetType,
+                                contentDescription = null,
+                                modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (card.formattedTitle != null) {
+                        Text(
+                            text = FamFormattedText(
+                                entityList = card.formattedTitle.entityList,
+                                simpleText = card.formattedTitle.text
+                            ),
                         )
                     }
 
-                    CardImage.ImageType.ASSET -> {
-                        AsyncImage(
-                            model = card.icon.assetType,
-                            contentDescription = null,
-                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                    if (card.formattedDescription != null) {
+                        Text(
+                            text = FamFormattedText(
+                                entityList = card.formattedDescription.entityList,
+                                simpleText = card.formattedDescription.text
+                            )
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.width(10.dp))
             }
 
-            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                if (card.formattedTitle != null) {
-                    Text(
-                        text = FamFormattedText(
-                            entityList = card.formattedTitle.entityList,
-                            simpleText = card.formattedTitle.text
-                        ),
-                    )
-                }
 
-                if (card.formattedDescription != null) {
-                    Text(
-                        text = FamFormattedText(
-                            entityList = card.formattedDescription.entityList,
-                            simpleText = card.formattedDescription.text
-                        )
-                    )
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = Modifier.clickable {
+                    card.url?.let { processDeepLink(it) }
                 }
-            }
+            )
         }
-
-
-        Icon(
-            imageVector = Icons.Filled.KeyboardArrowRight,
-            contentDescription = null,
-            modifier = Modifier.clickable {
-                card.url?.let { processDeepLink(it) }
-            }
-        )
     }
 }

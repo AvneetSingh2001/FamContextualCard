@@ -1,8 +1,6 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.card_components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -56,7 +57,7 @@ fun SmallDisplayCardGroup(cardGroup: CardGroup) {
             Row(
                 modifier = Modifier
                     .padding(paddingValues = PaddingValues(horizontal = 16.dp))
-            ){
+            ) {
                 cardGroup.cardList.forEach { card ->
                     SmallDisplayCard(
                         modifier = Modifier.weight(1f),
@@ -78,55 +79,58 @@ fun SmallDisplayCard(
     modifier: Modifier = Modifier,
     card: Card
 ) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(
-                color = if (card.bgColor != null) Color(card.bgColor.toColorInt())
-                else Color.Transparent
-            )
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (card.bgColor != null) Color(card.bgColor.toColorInt())
+            else Color.Transparent
+        ),
     ) {
-        if (card.icon != null) {
-            when (card.icon.imageType) {
-                CardImage.ImageType.EXTERNAL -> {
-                    AsyncImage(
-                        model = card.icon.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+        Row(
+            modifier = Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (card.icon != null) {
+                when (card.icon.imageType) {
+                    CardImage.ImageType.EXTERNAL -> {
+                        AsyncImage(
+                            model = card.icon.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                        )
+                    }
+
+                    CardImage.ImageType.ASSET -> {
+                        AsyncImage(
+                            model = card.icon.assetType,
+                            contentDescription = null,
+                            modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+
+            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
+                if (card.formattedTitle != null) {
+                    Text(
+                        text = FamFormattedText(
+                            entityList = card.formattedTitle.entityList,
+                            simpleText = card.formattedTitle.text
+                        ),
                     )
                 }
 
-                CardImage.ImageType.ASSET -> {
-                    AsyncImage(
-                        model = card.icon.assetType,
-                        contentDescription = null,
-                        modifier = Modifier.aspectRatio(card.icon.aspectRatio ?: 0.5f)
+                if (card.formattedDescription != null) {
+                    Text(
+                        text = FamFormattedText(
+                            entityList = card.formattedDescription.entityList,
+                            simpleText = card.formattedDescription.text
+                        )
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.width(10.dp))
-        }
-
-        Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-            if (card.formattedTitle != null) {
-                Text(
-                    text = FamFormattedText(
-                        entityList = card.formattedTitle.entityList,
-                        simpleText = card.formattedTitle.text
-                    ),
-                )
-            }
-
-            if (card.formattedDescription != null) {
-                Text(
-                    text = FamFormattedText(
-                        entityList = card.formattedDescription.entityList,
-                        simpleText = card.formattedDescription.text
-                    )
-                )
             }
         }
     }

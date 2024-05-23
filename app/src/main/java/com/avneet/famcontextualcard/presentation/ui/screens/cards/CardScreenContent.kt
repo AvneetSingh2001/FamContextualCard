@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.avneet.famcontextualcard.data.models.CardGroup
+import com.avneet.famcontextualcard.presentation.ui.screens.card_components.DynamicWidthCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardWithArrowGroup
 import com.avneet.famcontextualcard.ui.theme.FamContextualCardTheme
@@ -54,7 +55,7 @@ fun CardScreenContent(
                     }
 
                     CardGroup.DesignType.DYNAMIC_WIDTH_CARD -> {
-
+                        DynamicWidthCardGroup(cardGroup = cardGroup)
                     }
                 }
             }
