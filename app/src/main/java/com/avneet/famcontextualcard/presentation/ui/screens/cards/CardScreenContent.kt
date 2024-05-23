@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.avneet.famcontextualcard.data.models.CardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.DynamicWidthCardGroup
+import com.avneet.famcontextualcard.presentation.ui.screens.card_components.ImageCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardWithArrowGroup
 import com.avneet.famcontextualcard.ui.theme.FamContextualCardTheme
@@ -35,14 +36,24 @@ fun CardScreenContent(
             items(items = cardList) { cardGroup ->
                 when (cardGroup.designType) {
                     CardGroup.DesignType.SMALL_DISPLAY_CARD -> {
-                        SmallDisplayCardGroup(cardGroup = cardGroup)
+                        SmallDisplayCardGroup(
+                            cardGroup = cardGroup,
+                            processDeepUrl = { url ->
+                                processDeepLink(context = context, deepLinkUrl = url)
+                            }
+                        )
                     }
 
                     CardGroup.DesignType.BIG_DISPLAY_CARD -> {
                     }
 
                     CardGroup.DesignType.IMAGE_CARD -> {
-
+                        ImageCardGroup(
+                            cardGroup = cardGroup,
+                            processDeepLink = { url ->
+                                processDeepLink(context = context, deepLinkUrl = url)
+                            }
+                        )
                     }
 
                     CardGroup.DesignType.SMALL_CARD_WITH_ARROW -> {
@@ -55,7 +66,12 @@ fun CardScreenContent(
                     }
 
                     CardGroup.DesignType.DYNAMIC_WIDTH_CARD -> {
-                        DynamicWidthCardGroup(cardGroup = cardGroup)
+                        DynamicWidthCardGroup(
+                            cardGroup = cardGroup,
+                            processDeepUrl = { url ->
+                                processDeepLink(context = context, deepLinkUrl = url)
+                            }
+                        )
                     }
                 }
             }

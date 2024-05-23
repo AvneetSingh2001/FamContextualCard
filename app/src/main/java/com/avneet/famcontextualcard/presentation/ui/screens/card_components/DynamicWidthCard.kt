@@ -1,5 +1,6 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.card_components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,10 @@ import com.avneet.famcontextualcard.utils.gradientBackground
 
 
 @Composable
-fun DynamicWidthCardGroup(cardGroup: CardGroup) {
+fun DynamicWidthCardGroup(
+    cardGroup: CardGroup,
+    processDeepUrl: (String) -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -37,7 +41,8 @@ fun DynamicWidthCardGroup(cardGroup: CardGroup) {
         cardGroup.cardList.forEach { card ->
             DynamicWidthCard(
                 modifier = Modifier.fillMaxHeight(),
-                card = card
+                card = card,
+                processDeepUrl = processDeepUrl
             )
 
             if (card != cardGroup.cardList.last()) {
@@ -51,20 +56,28 @@ fun DynamicWidthCardGroup(cardGroup: CardGroup) {
 @Composable
 fun DynamicWidthCard(
     modifier: Modifier = Modifier,
-    card: Card
+    card: Card,
+    processDeepUrl: (String) -> Unit
 ) {
     Card(
         modifier = modifier
-            .aspectRatio(card.bgImage?.aspectRatio ?: 0.5f),
+            .aspectRatio(card.bgImage?.aspectRatio ?: 0.5f)
+            .clickable {
+                card.url?.let { processDeepUrl(it) }
+            },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (card.bgColor != null) Color(card.bgColor.toColorInt())
             else Color.Transparent
         ),
     ) {
-        Box(modifier = Modifier.fillMaxSize().gradientBackground(
-            angle = card.bgGradient?.angle,
-            colors = card.bgGradient?.colorList
-        ))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .gradientBackground(
+                    angle = card.bgGradient?.angle,
+                    colors = card.bgGradient?.colorList
+                )
+        )
     }
 }

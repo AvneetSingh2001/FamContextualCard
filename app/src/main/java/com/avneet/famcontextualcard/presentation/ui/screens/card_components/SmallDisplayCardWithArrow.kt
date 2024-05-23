@@ -89,7 +89,9 @@ fun SmallDisplayCardWithArrow(
     processDeepLink: (String) -> Unit
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable {
+            card.url?.let { processDeepLink(it) }
+        },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (card.bgColor != null) Color(card.bgColor.toColorInt())
@@ -151,9 +153,6 @@ fun SmallDisplayCardWithArrow(
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                modifier = Modifier.clickable {
-                    card.url?.let { processDeepLink(it) }
-                }
             )
         }
     }
