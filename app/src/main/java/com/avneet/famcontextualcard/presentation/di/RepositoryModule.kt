@@ -1,5 +1,6 @@
 package com.avneet.famcontextualcard.presentation.di
 
+import com.avneet.famcontextualcard.data.db.hidden_card.HiddenCardDao
 import com.avneet.famcontextualcard.data.networking.FamApiService
 import com.avneet.famcontextualcard.data.repository.CardsRepositoryImpl
 import com.avneet.famcontextualcard.domain.repository.CardsRepository
@@ -15,9 +16,13 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun provideCardRepository(famApiService: FamApiService): CardsRepository {
+    fun provideCardRepository(
+        famApiService: FamApiService,
+        hiddenCardDao: HiddenCardDao
+    ): CardsRepository {
         return CardsRepositoryImpl(
-            famApiService = famApiService
+            famApiService = famApiService,
+            hiddenCardDao = hiddenCardDao
         )
     }
 }

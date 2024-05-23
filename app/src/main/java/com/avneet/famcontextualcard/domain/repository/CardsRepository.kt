@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CardsRepository {
     fun fetchCards(): Flow<NetworkResult<CardGroupResponse>>
+    suspend fun hideCard(cardId: Int)
 }

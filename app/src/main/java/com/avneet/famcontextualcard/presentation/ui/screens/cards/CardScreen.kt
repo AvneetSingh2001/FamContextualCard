@@ -1,5 +1,7 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.cards
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,8 +37,12 @@ fun CardScreen(
     CardScreen(
         modifier = modifier,
         uiState = uiState.value,
-        dismiss = { },
-        remind = { }
+        dismiss = { cardId ->
+            viewModel.hideCardPermanently(cardId = cardId)
+        },
+        remind = { cardId ->
+            viewModel.hideCardTemporarily(cardId = cardId)
+        }
     )
 }
 
@@ -52,24 +57,30 @@ fun CardScreen(
         modifier = modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .background(color = backGroundColor)
-        ,
+            .background(color = backGroundColor),
         contentAlignment = Alignment.Center,
     ) {
         when (uiState) {
             is CardScreenUiState.Success -> {
-                if(uiState.cardList != null && uiState.cardList.cardGroup.isEmpty()) {
-                    EmptyContentScreen(
-                        title = stringResource(id = R.string.empty_list),
-                        imageContent = { Icon(imageVector = Icons.Default.Info, contentDescription = null) }
-                    )
-                } else {
-                    CardScreenContent(
-                        modifier = Modifier.fillMaxSize(),
-                        cardList = uiState.cardList!!.cardGroup,
-                        dismiss = dismiss,
-                        remind = remind
-                    )
+                uiState.cardList?.let {  cardGroup ->
+                    if(cardGroup.cardGroup.isNullOrEmpty()) {
+                        EmptyContentScreen(
+                            title = stringResource(id = R.string.empty_list),
+                            imageContent = {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                    } else {
+                        CardScreenContent(
+                            modifier = Modifier.fillMaxSize(),
+                            cardList = cardGroup.cardGroup,
+                            dismiss = dismiss,
+                            remind = remind
+                        )
+                    }
                 }
             }
 
@@ -77,7 +88,12 @@ fun CardScreen(
                 EmptyContentScreen(
                     title = stringResource(id = R.string.Error),
                     subTitle = uiState.message ?: "",
-                    imageContent = { Icon(imageVector = Icons.Default.Warning, contentDescription = null) }
+                    imageContent = {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = null
+                        )
+                    }
                 )
             }
 

@@ -1,5 +1,6 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.cards
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avneet.famcontextualcard.data.models.CardGroupResponse
@@ -9,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +22,8 @@ class CardScreenViewModel @Inject constructor(
     private var _cardUiState: MutableStateFlow<CardScreenUiState> = MutableStateFlow(CardScreenUiState.Loading)
     val cardScreenUiState: StateFlow<CardScreenUiState> get() = _cardUiState
 
+    private val temporarilyHiddenCardIds = mutableSetOf<Int>()
+
     init {
         fetchCards()
     }
@@ -31,13 +33,32 @@ class CardScreenViewModel @Inject constructor(
             cardsRepository.fetchCards().collectLatest { result ->
                 _cardUiState.value = when (result) {
                     is NetworkResult.Loading -> CardScreenUiState.Loading
-                    is NetworkResult.Success -> CardScreenUiState.Success(result.data)
+                    is NetworkResult.Success -> {
+                        val cardGroupResponse = result.data
+                        val filteredCardGroups = cardGroupResponse?.cardGroup?.map { cardGroup ->
+                            cardGroup.copy(cardList = cardGroup.cardList.filterNot { card ->
+                                temporarilyHiddenCardIds.contains(card.id)
+                            })
+                        }
+                        CardScreenUiState.Success(CardGroupResponse(filteredCardGroups))
+                    }
                     is NetworkResult.Error -> CardScreenUiState.Error(result.error)
                 }
             }
         }
     }
 
+    fun hideCardPermanently(cardId: Int) {
+        viewModelScope.launch {
+            cardsRepository.hideCard(cardId)
+        }
+        fetchCards()
+    }
+
+    fun hideCardTemporarily(cardId: Int) {
+        temporarilyHiddenCardIds.add(cardId)
+        fetchCards()
+    }
 }
 
 sealed class CardScreenUiState() {

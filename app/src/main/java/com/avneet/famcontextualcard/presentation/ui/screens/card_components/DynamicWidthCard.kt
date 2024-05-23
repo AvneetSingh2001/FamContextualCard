@@ -61,7 +61,7 @@ fun DynamicWidthCard(
 ) {
     Card(
         modifier = modifier
-            .aspectRatio(card.bgImage?.aspectRatio ?: 0.5f)
+            .aspectRatio(card.bgImage?.aspectRatio ?: 0.5f, matchHeightConstraintsFirst = true)
             .clickable {
                 card.url?.let { processDeepUrl(it) }
             },

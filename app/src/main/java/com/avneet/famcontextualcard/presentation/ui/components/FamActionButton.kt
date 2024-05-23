@@ -1,5 +1,6 @@
 package com.avneet.famcontextualcard.presentation.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,8 @@ fun FamActionButton(
             containerColor = backGroundColor
         ),
         contentPadding = PaddingValues(10.dp),
-        onClick = { onClick() }) {
+        onClick = { onClick.invoke() }
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
