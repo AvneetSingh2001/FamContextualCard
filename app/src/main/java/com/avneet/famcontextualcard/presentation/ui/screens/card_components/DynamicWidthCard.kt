@@ -35,7 +35,7 @@ fun DynamicWidthCardGroup(
 ) {
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
             .height(cardGroup.height?.dp ?: 0.dp)
     ) {
         cardGroup.cardList.forEach { card ->

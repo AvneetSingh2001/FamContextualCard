@@ -6,6 +6,8 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.avneet.famcontextualcard.data.models.CardGroup
+import com.avneet.famcontextualcard.presentation.ui.screens.card_components.BigDisplayCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.DynamicWidthCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.ImageCardGroup
 import com.avneet.famcontextualcard.presentation.ui.screens.card_components.SmallDisplayCardGroup
@@ -28,12 +31,15 @@ import com.avneet.famcontextualcard.ui.theme.FamContextualCardTheme
 @Composable
 fun CardScreenContent(
     modifier: Modifier = Modifier,
-    cardList: List<CardGroup>
+    cardList: List<CardGroup>,
+    dismiss: (Int) -> Unit,
+    remind: (Int) -> Unit
 ) {
     val context = LocalContext.current
     Column(modifier = modifier) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(items = cardList) { cardGroup ->
+                Spacer(modifier = Modifier.height(20.dp))
                 when (cardGroup.designType) {
                     CardGroup.DesignType.SMALL_DISPLAY_CARD -> {
                         SmallDisplayCardGroup(
@@ -45,6 +51,14 @@ fun CardScreenContent(
                     }
 
                     CardGroup.DesignType.BIG_DISPLAY_CARD -> {
+                        BigDisplayCardGroup(
+                            cardGroup = cardGroup,
+                            processDeepUrl = { url ->
+                                processDeepLink(context = context, deepLinkUrl = url)
+                            },
+                            dismiss = dismiss,
+                            remind = remind
+                        )
                     }
 
                     CardGroup.DesignType.IMAGE_CARD -> {

@@ -3,4 +3,6 @@
     <string name="loading">Loading</string>
     <string name="empty_list">Empty List</string>
     <string name="Error">Error</string>
+    <string name="remind_later">remind later</string>
+    <string name="dismiss_now">dismiss now</string>
 </resources>

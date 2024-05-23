@@ -3,7 +3,7 @@ package com.avneet.famcontextualcard.data.models
 import com.google.gson.annotations.SerializedName
 
 data class Card(
-    val id: Int? = null,
+    val id: Int,
 
     val name: String,
 

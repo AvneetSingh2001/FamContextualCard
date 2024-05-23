@@ -1,7 +1,9 @@
 package com.avneet.famcontextualcard.presentation.ui.screens.cards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
@@ -9,8 +11,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avneet.famcontextualcard.R
@@ -18,6 +23,7 @@ import com.avneet.famcontextualcard.data.models.CardGroupResponse
 import com.avneet.famcontextualcard.presentation.ui.components.EmptyContentScreen
 import com.avneet.famcontextualcard.presentation.ui.components.FamLoadingWheel
 import com.avneet.famcontextualcard.ui.theme.FamContextualCardTheme
+import com.avneet.famcontextualcard.ui.theme.backGroundColor
 
 
 @Composable
@@ -29,18 +35,26 @@ fun CardScreen(
 
     CardScreen(
         modifier = modifier,
-        uiState = uiState.value
+        uiState = uiState.value,
+        dismiss = { },
+        remind = { }
     )
 }
 
 @Composable
 fun CardScreen(
     modifier: Modifier = Modifier,
-    uiState: CardScreenUiState
+    uiState: CardScreenUiState,
+    dismiss: (Int) -> Unit,
+    remind: (Int) -> Unit
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(color = backGroundColor)
+        ,
+        contentAlignment = Alignment.Center,
     ) {
         when (uiState) {
             is CardScreenUiState.Success -> {
@@ -52,7 +66,9 @@ fun CardScreen(
                 } else {
                     CardScreenContent(
                         modifier = Modifier.fillMaxSize(),
-                        cardList = uiState.cardList!!.cardGroup
+                        cardList = uiState.cardList!!.cardGroup,
+                        dismiss = dismiss,
+                        remind = remind
                     )
                 }
             }
@@ -80,7 +96,9 @@ fun CardScreen(
 fun CardScreenPreview() {
     FamContextualCardTheme {
         CardScreen(
-            uiState = CardScreenUiState.Success(CardGroupResponse(cardGroup = listOf()))
+            uiState = CardScreenUiState.Success(CardGroupResponse(cardGroup = listOf())),
+            dismiss = {},
+            remind = {}
         )
     }
 }
@@ -90,7 +108,9 @@ fun CardScreenPreview() {
 fun CardScreenLoadingPreview() {
     FamContextualCardTheme {
         CardScreen(
-            uiState = CardScreenUiState.Loading
+            uiState = CardScreenUiState.Loading,
+            dismiss = {},
+            remind = {}
         )
     }
 }
